@@ -16,6 +16,7 @@
 
 package hipstershop;
 
+
 import hipstershop.Demo.Ad;
 import hipstershop.Demo.AdRequest;
 import hipstershop.Demo.AdResponse;
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 
 /** A simple client that requests ads from the Ads Service. */
 public class AdServiceClient {

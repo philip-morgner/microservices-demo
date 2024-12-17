@@ -151,41 +151,43 @@ public final class AdService {
     }
   }
 
+  private static String language = "en";
+
   private static ImmutableListMultimap<String, Ad> createAdsMap() {
     Ad hairdryer =
         Ad.newBuilder()
             .setRedirectUrl("/product/2ZYFJ3GM2N")
-            .setText("Hairdryer for sale. 50% off.")
+            .setText(getTranslation("adHairDryer"))
             .build();
     Ad tankTop =
         Ad.newBuilder()
             .setRedirectUrl("/product/66VCHSJNUP")
-            .setText("Tank top for sale. 20% off.")
+            .setText(getTranslation("adTankTop"))
             .build();
     Ad candleHolder =
         Ad.newBuilder()
             .setRedirectUrl("/product/0PUK6V6EV0")
-            .setText("Candle holder for sale. 30% off.")
+            .setText(getTranslation("adCandleHolder"))
             .build();
     Ad bambooGlassJar =
         Ad.newBuilder()
             .setRedirectUrl("/product/9SIQT8TOJO")
-            .setText("Bamboo glass jar for sale. 10% off.")
+            .setText(getTranslation("adBambooGlass"))
             .build();
     Ad watch =
         Ad.newBuilder()
             .setRedirectUrl("/product/1YMWWN1N4O")
-            .setText("Watch for sale. Buy one, get second kit for free")
+            .setText(getTranslation("adWatch"))
             .build();
     Ad mug =
         Ad.newBuilder()
             .setRedirectUrl("/product/6E92ZMYYFZ")
-            .setText("Mug for sale. Buy two, get third one for free")
+            .setText(getTranslation("adMug"))
             .build();
     Ad loafers =
         Ad.newBuilder()
             .setRedirectUrl("/product/L9ECAV7KIM")
-            .setText("Loafers for sale. Buy one, get second one for free")
+            .setText(getTranslation("adLoafers"))
             .build();
     return ImmutableListMultimap.<String, Ad>builder()
         .putAll("clothing", tankTop)
@@ -215,7 +217,7 @@ public final class AdService {
     String serverUrl = "http://localhost:3000/translate";
     try {
         // Build the URI with query parameters
-        URI uri = URI.create(serverUrl + "?key=" + key + "&language=" + "english");
+        URI uri = URI.create(serverUrl + "?key=" + key + "&language=" + language);
 
         // Create an HTTP client
         HttpClient client = HttpClient.newHttpClient();
