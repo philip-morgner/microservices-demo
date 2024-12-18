@@ -245,6 +245,7 @@ service AdService {
 message AdRequest {
     // List of important key words from the current page describing the context.
     repeated string context_keys = 1;
+    string current_language = 2;
 }
 
 message AdResponse {

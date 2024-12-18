@@ -597,7 +597,7 @@ func (fe *frontendServer) setLanguageHandler(w http.ResponseWriter, r *http.Requ
 // chooseAd queries for advertisements available and randomly chooses one, if
 // available. It ignores the error retrieving the ad since it is not critical.
 func (fe *frontendServer) chooseAd(ctx context.Context, ctxKeys []string, log logrus.FieldLogger) *pb.Ad {
-	ads, err := fe.getAd(ctx, ctxKeys)
+	ads, err := fe.getAd(ctx, ctxKeys, currentLanguage(r))
 	if err != nil {
 		log.WithField("error", err).Warn("failed to retrieve ads")
 		return nil

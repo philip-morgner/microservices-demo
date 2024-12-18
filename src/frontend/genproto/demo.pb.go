@@ -1665,6 +1665,9 @@ type AdRequest struct {
 
 	// List of important key words from the current page describing the context.
 	ContextKeys []string `protobuf:"bytes,1,rep,name=context_keys,json=contextKeys,proto3" json:"context_keys,omitempty"`
+	CurrentLanguage string `protobuf:"bytes,2,opt,name=current_language,proto3" json:"current_language,omitempty"`
+
+
 }
 
 func (x *AdRequest) Reset() {
