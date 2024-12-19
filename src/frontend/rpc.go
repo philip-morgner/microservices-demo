@@ -69,26 +69,6 @@ func (fe *frontendServer) getLanguages(log logrus.FieldLogger) ([]string, error)
 }
 
 func (fe *frontendServer) getTranslation(translationKey string, languageCode string) (string, error) {
-
-	// url := fmt.Sprintf("http://languageservice:3000/translate?translationKey=%s&targetLanguageCode=%s", translationKey, languageCode)
-
-	// resp, err1 := http.Get(url)
-
-	// if err1 != nil {
-	// 	return "", err1
-	// }
-
-	// defer resp.Body.Close()
-
-	// body, err2 := ioutil.ReadAll(resp.Body)
-	// if err2 != nil {
-	// 	return "", err2
-	// }
-
-	// sb := string(body)
-
-	// return sb, nil
-
 	postBody, err1 := json.Marshal(map[string]string{
 		"translationKey":  translationKey,
 		"targetLanguageCode": languageCode,
@@ -233,11 +213,32 @@ func (fe *frontendServer) getRecommendations(ctx context.Context, userID string,
 }
 
 func (fe *frontendServer) getAd(ctx context.Context, ctxKeys []string, languageCode string) ([]*pb.Ad, error) {
-	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*100)
-	defer cancel()
+    postBody, err1 := json.Marshal(map[string]string{
+		"contextKeys":  ctxKeys,
+		"currentLanguage": languageCode,
+	 })
 
-	resp, err := pb.NewAdServiceClient(fe.adSvcConn).GetAds(ctx, &pb.AdRequest{
-		ContextKeys: ctxKeys, CurrentLanguage: languageCode,
-	})
-	return resp.GetAds(), errors.Wrap(err, "failed to get ads")
+	 if err1 != nil {
+		return nil, errors.Wrap(err1, "failed to get ads")
+	}
+
+	requestBody := bytes.NewBuffer(postBody)
+
+	resp, err2 := http.Post("http://adservice:9555/getAds", "application/json", requestBody)
+
+	if err2 != nil {
+		return nil, errors.Wrap(err2, "failed to get ads")
+	}
+
+	defer resp.Body.Close()
+	respBody, err3 := ioutil.ReadAll(resp.Body)
+
+	if err3 != nil {
+		return nil, errors.Wrap(err3, "failed to get ads")
+	}
+
+	var body []string
+	json.Unmarshal(respBody, &body)
+
+	return body, nil
 }
