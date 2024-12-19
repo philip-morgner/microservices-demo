@@ -94,7 +94,7 @@
     "de": "Ein einfacher Becher mit einem Senf-Innenraum.",
     "es": "Una taza sencilla con un interior color mostaza."
   },
-  "adHairdryer":{ 
+  "adHairDryer": {
     "en": "Hairdryer for sale. 50% off",
     "de": "Haartrockner im Angebot. 50% Rabatt",
     "es": "Secador de pelo en oferta. 50% de descuento"
@@ -104,7 +104,7 @@
     "de": "Tanktop im Angebot. 20% Rabatt.",
     "es": "Camiseta sin mangas en oferta. 20% de descuento."
   },
-  "Candle holder for sale. 30% off.":{ 
+  "adCandleHolder": {
     "en": "Candle holder for sale. 30% off.",
     "de": "Kerzenhalter im Angebot. 20% Rabatt.",
     "es": "Sujeta velas en oferta. 20% de descuento."
