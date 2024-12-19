@@ -7,12 +7,13 @@ const { translate, getSupportedLanguages } = require("./resolvers");
 const app = express();
 
 const PORT = process.env.PORT || config.service.port;
-const SERVICE_NAME = config.service.name;
+const SERVICE_NAME = process.env.SERVICE_NAME || config.service.name;
 
 app.use(express.json());
 
+// easter egg for the tutors
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Merry Christmas!");
 });
 
 app.get("/getSupportedLanguages", (req, res) =>
