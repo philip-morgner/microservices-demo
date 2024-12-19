@@ -69,26 +69,6 @@ func (fe *frontendServer) getLanguages(log logrus.FieldLogger) ([]string, error)
 }
 
 func (fe *frontendServer) getTranslation(translationKey string, languageCode string) (string, error) {
-
-	// url := fmt.Sprintf("http://languageservice:3000/translate?translationKey=%s&targetLanguageCode=%s", translationKey, languageCode)
-
-	// resp, err1 := http.Get(url)
-
-	// if err1 != nil {
-	// 	return "", err1
-	// }
-
-	// defer resp.Body.Close()
-
-	// body, err2 := ioutil.ReadAll(resp.Body)
-	// if err2 != nil {
-	// 	return "", err2
-	// }
-
-	// sb := string(body)
-
-	// return sb, nil
-
 	postBody, err1 := json.Marshal(map[string]string{
 		"translationKey":  translationKey,
 		"targetLanguageCode": languageCode,

@@ -12,7 +12,7 @@ const SERVICE_NAME = config.service.name;
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello World :D!");
+  res.send("Hello World!");
 });
 
 app.get("/getSupportedLanguages", (req, res) =>

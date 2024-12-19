@@ -565,10 +565,6 @@ func (fe *frontendServer) setCurrencyHandler(w http.ResponseWriter, r *http.Requ
 func (fe *frontendServer) setLanguageHandler(w http.ResponseWriter, r *http.Request) {
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
 
-	log.Println("\n\n\n")
-	log.Println("setLanguageHandler")
-	log.Println("\n\n\n")
-
 	lang := r.FormValue("language_code")
 	payload := validator.SetLanguagePayload{Language: lang}
 	if err := payload.Validate(); err != nil {
