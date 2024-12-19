@@ -2,7 +2,7 @@
 
 This project is a fork of Google's Online Boutique, which is a demo for microservices architecture ([Github](https://github.com/GoogleCloudPlatform/microservices-demo)). As part of the course "Continuous Software Engineering" at Technical University of Berlin, this project is the result of the group work of Ivan Crespo Gadea, Javad Ismayilzada and Philip Morgner. We implemented the languageservice to make Online Boutique's content available in different languages. The functionality is limited to product names and descriptions and ad content. It serves as a demo of the integration of our languageservice microservice. In the frontend, there is a dropdown to select from three different languages, English, German and Spanish. The loadgenerator microservice is enhanced to select different languages as well. The default language is English.
 
-Furthermore, we integrated the project with Ansible to enable a simple deployment process to a minikube cluster on a remote server. Currently it is only tested for localhost and prerequisites (docker, minikube, skaffold, kubectl) must be pre-installed. In a next step we created Github Actions to automate the deployment process and leverage Github's Container Registry (ghrc).
+Furthermore, we integrated the project with Ansible to enable a simple deployment process to a minikube cluster on a remote server. Currently it is only tested for localhost and prerequisites (docker, minikube, skaffold, kubectl) must be pre-installed. In a next step we created a Github Action to create a continuous deployment process after the main branch changes.
 
 ---
 
