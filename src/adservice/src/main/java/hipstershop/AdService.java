@@ -150,45 +150,51 @@
        server.awaitTermination();
      }
    }
-   private static String getCurrentLanguage() { return "de";}
+   private static String getRandomLanguage() { 
+      String[] languages = {"en", "de", "es"}; 
+      Random r = new Random(); 
+      int index = r.nextInt(languages.length);
 
-   private static String language = getCurrentLanguage();
+      return languages[index];
+    }
+
+   private static String language = getRandomLanguage();
 
    private static ImmutableListMultimap<String, Ad> createAdsMap() {
     Ad hairdryer =
          Ad.newBuilder()
              .setRedirectUrl("/product/2ZYFJ3GM2N")
-             .setText(getTranslation("adHairDryer", getCurrentLanguage()))
+             .setText(getTranslation("adHairDryer"))
              .build();
      Ad tankTop =
          Ad.newBuilder()
              .setRedirectUrl("/product/66VCHSJNUP")
-             .setText(getTranslation("adTankTop", getCurrentLanguage()))
+             .setText(getTranslation("adTankTop"))
              .build();
      Ad candleHolder =
          Ad.newBuilder()
              .setRedirectUrl("/product/0PUK6V6EV0")
-             .setText(getTranslation("adCandleHolder", getCurrentLanguage()))
+             .setText(getTranslation("adCandleHolder"))
              .build();
      Ad bambooGlassJar =
          Ad.newBuilder()
              .setRedirectUrl("/product/9SIQT8TOJO")
-             .setText(getTranslation("adBambooGlass", getCurrentLanguage()))
+             .setText(getTranslation("adBambooGlass"))
              .build();
      Ad watch =
          Ad.newBuilder()
              .setRedirectUrl("/product/1YMWWN1N4O")
-             .setText(getTranslation("adWatch", getCurrentLanguage()))
+             .setText(getTranslation("adWatch"))
              .build();
      Ad mug =
          Ad.newBuilder()
              .setRedirectUrl("/product/6E92ZMYYFZ")
-             .setText(getTranslation("adMug", getCurrentLanguage()))
+             .setText(getTranslation("adMug"))
              .build();
      Ad loafers =
          Ad.newBuilder()
              .setRedirectUrl("/product/L9ECAV7KIM")
-             .setText(getTranslation("adLoafers", getCurrentLanguage()))
+             .setText(getTranslation("adLoafers"))
              .build();
      return ImmutableListMultimap.<String, Ad>builder()
          .putAll("clothing", tankTop)
@@ -214,15 +220,17 @@
  
    }
  
-   private static String getTranslation(String key, String currlanguage) {
+   private static String getTranslation(String key) {
     String serverUrl = "http://languageservice:3000/translate";
+
+    String lang = getRandomLanguage();
 
     try {
         // Create the HTTP client
         HttpClient client = HttpClient.newHttpClient();
 
         // Create the JSON payload for the POST request
-        String requestBody = String.format("{\"translationKey\":\"%s\", \"targetLanguageCode\":\"%s\"}", key, currlanguage);
+        String requestBody = String.format("{\"translationKey\":\"%s\", \"targetLanguageCode\":\"%s\"}", key, lang);
 
         // Create the HTTP POST request
         HttpRequest request = HttpRequest.newBuilder()
