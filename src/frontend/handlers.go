@@ -123,7 +123,7 @@ func (fe *frontendServer) homeHandler(w http.ResponseWriter, r *http.Request) {
 		"products":      ps,
 		"cart_size":     cartSize(cart),
 		"banner_color":  os.Getenv("BANNER_COLOR"), // illustrates canary deployments
-		"ad":            fe.chooseAd(r.Context(), []string{}, log),
+		"ad":            fe.chooseAd(r.Context(), []string{}, log, currentLanguage(r)),
 	})); err != nil {
 		log.Error(err)
 	}
@@ -212,7 +212,7 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	if err := templates.ExecuteTemplate(w, "product", injectCommonTemplateData(r, map[string]interface{}{
-		"ad":              fe.chooseAd(r.Context(), p.Categories, log),
+		"ad":              fe.chooseAd(r.Context(), p.Categories, log, currentLanguage(r)),
 		"show_currency":   true,
 		"show_language":   true,
 		"currencies":      currencies,
@@ -596,8 +596,8 @@ func (fe *frontendServer) setLanguageHandler(w http.ResponseWriter, r *http.Requ
 
 // chooseAd queries for advertisements available and randomly chooses one, if
 // available. It ignores the error retrieving the ad since it is not critical.
-func (fe *frontendServer) chooseAd(ctx context.Context, ctxKeys []string, log logrus.FieldLogger) *pb.Ad {
-	ads, err := fe.getAd(ctx, ctxKeys, currentLanguage(r))
+func (fe *frontendServer) chooseAd(ctx context.Context, ctxKeys []string, log logrus.FieldLogger, languageCode string) *pb.Ad {
+	ads, err := fe.getAd(ctx, ctxKeys, languageCode)
 	if err != nil {
 		log.WithField("error", err).Warn("failed to retrieve ads")
 		return nil

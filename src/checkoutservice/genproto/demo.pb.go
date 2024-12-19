@@ -1665,6 +1665,8 @@ type AdRequest struct {
 
 	// List of important key words from the current page describing the context.
 	ContextKeys []string `protobuf:"bytes,1,rep,name=context_keys,json=contextKeys,proto3" json:"context_keys,omitempty"`
+	// The language code for the current page.
+	Language string `protobuf:"bytes,2,opt,name=language,proto3" json:"language,omitempty"`
 }
 
 func (x *AdRequest) Reset() {
@@ -1702,6 +1704,12 @@ func (*AdRequest) Descriptor() ([]byte, []int) {
 func (x *AdRequest) GetContextKeys() []string {
 	if x != nil {
 		return x.ContextKeys
+	}
+	return nil
+}
+func (x *AdRequest) GetCurrentLanguage() string {
+	if x != nil {
+		return x.Language
 	}
 	return nil
 }

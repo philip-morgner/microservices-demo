@@ -47,6 +47,8 @@
  
    private static final Logger logger = LogManager.getLogger(AdService.class);
  
+
+
    @SuppressWarnings("FieldCanBeLocal")
    private static int MAX_ADS_TO_SERVE = 2;
  
@@ -95,23 +97,25 @@
       * @param responseObserver the stream observer which gets notified with the value of {@code
       *     AdResponse}
       */
+      private String currlanguage;
      @Override
      public void getAds(AdRequest req, StreamObserver<AdResponse> responseObserver) {
        AdService service = AdService.getInstance();
        try {
          List<Ad> allAds = new ArrayList<>();
          logger.info("received ad request (context_words=" + req.getContextKeysList() + ")");
+         this.currlanguage = req.GetCurrentLanguage();
          if (req.getContextKeysCount() > 0) {
            for (int i = 0; i < req.getContextKeysCount(); i++) {
-             Collection<Ad> ads = service.getAdsByCategory(req.getContextKeys(i));
+             Collection<Ad> ads = service.getAdsByCategory(req.getContextKeys(i), currlanguage);
              allAds.addAll(ads);
            }
          } else {
-           allAds = service.getRandomAds();
+           allAds = service.getRandomAds(currlanguage);
          }
          if (allAds.isEmpty()) {
            // Serve random ads.
-           allAds = service.getRandomAds();
+           allAds = service.getRandomAds(currlanguage);
          }
          AdResponse reply = AdResponse.newBuilder().addAllAds(allAds).build();
          responseObserver.onNext(reply);
@@ -123,15 +127,16 @@
      }
    }
  
-   private static final ImmutableListMultimap<String, Ad> adsMap = createAdsMap();
  
-   private Collection<Ad> getAdsByCategory(String category) {
-     return adsMap.get(category);
+   private Collection<Ad> getAdsByCategory(String category, String currlanguage) {
+    ImmutableListMultimap<String, Ad> adsMap = createAdsMap(currlanguage); 
+    return adsMap.get(category);
    }
  
    private static final Random random = new Random();
  
-   private List<Ad> getRandomAds() {
+   private List<Ad> getRandomAds(String currlanguage) {
+    ImmutableListMultimap<String, Ad> adsMap = createAdsMap(currlanguage); 
      List<Ad> ads = new ArrayList<>(MAX_ADS_TO_SERVE);
      Collection<Ad> allAds = adsMap.values();
      for (int i = 0; i < MAX_ADS_TO_SERVE; i++) {
@@ -150,45 +155,43 @@
        server.awaitTermination();
      }
    }
-   private static String getCurrentLanguage() { return "de";}
 
-   private static String language = getCurrentLanguage();
 
-   private static ImmutableListMultimap<String, Ad> createAdsMap() {
+   private static ImmutableListMultimap<String, Ad> createAdsMap(String currlanguage) {
     Ad hairdryer =
          Ad.newBuilder()
              .setRedirectUrl("/product/2ZYFJ3GM2N")
-             .setText(getTranslation("adHairDryer", getCurrentLanguage()))
+             .setText(getTranslation("adHairDryer", currlanguage))
              .build();
      Ad tankTop =
          Ad.newBuilder()
              .setRedirectUrl("/product/66VCHSJNUP")
-             .setText(getTranslation("adTankTop", getCurrentLanguage()))
+             .setText(getTranslation("adTankTop", currlanguage))
              .build();
      Ad candleHolder =
          Ad.newBuilder()
              .setRedirectUrl("/product/0PUK6V6EV0")
-             .setText(getTranslation("adCandleHolder", getCurrentLanguage()))
+             .setText(getTranslation("adCandleHolder", currlanguage))
              .build();
      Ad bambooGlassJar =
          Ad.newBuilder()
              .setRedirectUrl("/product/9SIQT8TOJO")
-             .setText(getTranslation("adBambooGlass", getCurrentLanguage()))
+             .setText(getTranslation("adBambooGlass", currlanguage))
              .build();
      Ad watch =
          Ad.newBuilder()
              .setRedirectUrl("/product/1YMWWN1N4O")
-             .setText(getTranslation("adWatch", getCurrentLanguage()))
+             .setText(getTranslation("adWatch", currlanguage))
              .build();
      Ad mug =
          Ad.newBuilder()
              .setRedirectUrl("/product/6E92ZMYYFZ")
-             .setText(getTranslation("adMug", getCurrentLanguage()))
+             .setText(getTranslation("adMug", currlanguage))
              .build();
      Ad loafers =
          Ad.newBuilder()
              .setRedirectUrl("/product/L9ECAV7KIM")
-             .setText(getTranslation("adLoafers", getCurrentLanguage()))
+             .setText(getTranslation("adLoafers", currlanguage))
              .build();
      return ImmutableListMultimap.<String, Ad>builder()
          .putAll("clothing", tankTop)
@@ -214,7 +217,7 @@
  
    }
  
-   private static String getTranslation(String key, String currlanguage) {
+   private static String getTranslation(String key, String currentlanguage) {
     String serverUrl = "http://languageservice:3000/translate";
 
     try {
@@ -222,7 +225,7 @@
         HttpClient client = HttpClient.newHttpClient();
 
         // Create the JSON payload for the POST request
-        String requestBody = String.format("{\"translationKey\":\"%s\", \"targetLanguageCode\":\"%s\"}", key, currlanguage);
+        String requestBody = String.format("{\"translationKey\":\"%s\", \"targetLanguageCode\":\"%s\"}", key, currentlanguage);
 
         // Create the HTTP POST request
         HttpRequest request = HttpRequest.newBuilder()

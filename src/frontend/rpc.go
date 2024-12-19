@@ -237,7 +237,7 @@ func (fe *frontendServer) getAd(ctx context.Context, ctxKeys []string, languageC
 	defer cancel()
 
 	resp, err := pb.NewAdServiceClient(fe.adSvcConn).GetAds(ctx, &pb.AdRequest{
-		ContextKeys: ctxKeys, CurrentLanguage: languageCode
+		ContextKeys: ctxKeys, CurrentLanguage: languageCode,
 	})
 	return resp.GetAds(), errors.Wrap(err, "failed to get ads")
 }
